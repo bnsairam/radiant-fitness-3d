@@ -1,26 +1,44 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navbar } from "@/components/Navbar";
+import { Hero } from "@/components/Hero";
+import { Marquee } from "@/components/Marquee";
+import { Programs } from "@/components/Programs";
+import { Transformations } from "@/components/Transformations";
+import { Trainers } from "@/components/Trainers";
+import { JoinCTA } from "@/components/JoinCTA";
+import { Footer } from "@/components/Footer";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title: "TotalFit Studio — Forge Your Legend | 3D Fitness Experience" },
+      {
+        name: "description",
+        content:
+          "Step inside the most advanced fitness studio on Earth. Elite coaches, six disciplines, real transformations. 24/7 access from $49/mo.",
+      },
+      { property: "og:title", content: "TotalFit Studio — Forge Your Legend" },
+      {
+        property: "og:description",
+        content:
+          "The most advanced fitness studio on Earth. Real transformations, elite coaches, 24/7 access.",
+      },
+    ],
+  }),
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
-
 function Index() {
-  return <PlaceholderIndex />;
+  return (
+    <main className="bg-background text-foreground">
+      <Navbar />
+      <Hero />
+      <Marquee />
+      <Programs />
+      <Transformations />
+      <Trainers />
+      <JoinCTA />
+      <Footer />
+    </main>
+  );
 }
