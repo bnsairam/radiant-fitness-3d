@@ -57,7 +57,7 @@ export function SiteFooter() {
 
       <div className="border-t border-border">
         <div className="container mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} Total Fitness Studio, Chromepet. All rights reserved.</p>
+          <p>© 2026 Total Fitness Studio, Chromepet. All rights reserved.</p>
           <p className="tracking-widest uppercase">Transform Your Body · Elevate Your Life</p>
         </div>
       </div>
