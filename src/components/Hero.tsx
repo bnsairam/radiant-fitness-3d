@@ -6,9 +6,9 @@ export function Hero() {
   return (
     <section className="relative min-h-screen w-full overflow-hidden flex items-center justify-center noise">
       {/* Animated aurora mesh */}
-      <div aria-hidden className="absolute inset-0 z-[1] aurora pointer-events-none" />
+      <div aria-hidden="true" className="absolute inset-0 z-[1] aurora pointer-events-none" />
       {/* Moving grid floor */}
-      <div aria-hidden className="absolute inset-0 z-[2] grid-floor opacity-40 pointer-events-none" />
+      <div aria-hidden="true" className="absolute inset-0 z-[2] grid-floor opacity-40 pointer-events-none" />
 
       {/* 3D background */}
       <ThreeScene />

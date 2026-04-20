@@ -76,7 +76,7 @@ export function TransformationCard({
         <div className="absolute -inset-1 rounded-2xl bg-gradient-electric opacity-40 blur-md group-hover:opacity-90 transition-opacity duration-500" />
         {/* Conic halo on hover */}
         <div
-          aria-hidden
+          aria-hidden="true"
           className="absolute -inset-3 rounded-3xl opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-700 pointer-events-none"
           style={{
             background:
