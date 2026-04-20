@@ -59,7 +59,7 @@ export function TransformationGallery({ heading = true }: { heading?: boolean })
             <h2 className="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.9]">
               Real Results.
               <br />
-              <span className="text-primary text-glow">Real Transformations</span>{" "}
+              <span className="text-gradient-animated">Real Transformations</span>{" "}
               <span className="text-accent">at Total Fitness Studio</span>
             </h2>
             <p className="text-base md:text-lg text-muted-foreground mt-6 max-w-2xl leading-relaxed">
