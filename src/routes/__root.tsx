@@ -2,6 +2,7 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 
 import appCss from "../styles.css?url";
 import { ScrollProgress } from "@/components/ScrollProgress";
+import { MagneticCursor } from "@/components/MagneticCursor";
 
 function NotFoundComponent() {
   return (
@@ -70,6 +71,7 @@ function RootComponent() {
   return (
     <>
       <ScrollProgress />
+      <MagneticCursor />
       <Outlet />
     </>
   );
