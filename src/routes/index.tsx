@@ -10,6 +10,7 @@ import { Trainers } from "@/components/Trainers";
 import { Pricing } from "@/components/Pricing";
 import { Testimonials } from "@/components/Testimonials";
 import { ContactSection } from "@/components/ContactSection";
+import { SectionDivider } from "@/components/SectionDivider";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -41,9 +42,12 @@ function Index() {
       <Hero />
       <Marquee />
       <Services />
+      <SectionDivider />
       <TransformationGallery />
+      <SectionDivider />
       <Trainers />
       <Pricing />
+      <SectionDivider />
       <Testimonials />
       <ContactSection />
       <SiteFooter />
