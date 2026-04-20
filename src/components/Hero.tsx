@@ -5,6 +5,11 @@ import { ThreeScene } from "./ThreeScene";
 export function Hero() {
   return (
     <section className="relative min-h-screen w-full overflow-hidden flex items-center justify-center noise">
+      {/* Animated aurora mesh */}
+      <div aria-hidden className="absolute inset-0 z-[1] aurora pointer-events-none" />
+      {/* Moving grid floor */}
+      <div aria-hidden className="absolute inset-0 z-[2] grid-floor opacity-40 pointer-events-none" />
+
       {/* 3D background */}
       <ThreeScene />
 
@@ -34,7 +39,7 @@ export function Hero() {
           <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] leading-[0.88] text-glow">
             Chennai's
             <br />
-            <span className="text-primary">Premier</span> Fitness
+            <span className="text-gradient-animated">Premier</span> Fitness
             <br />
             <span className="text-stroke">Studio</span> in <span className="text-accent">Chromepet</span>
           </h1>
