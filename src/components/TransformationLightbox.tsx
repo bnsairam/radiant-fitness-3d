@@ -122,6 +122,7 @@ export function TransformationLightbox({
     const rect = sliderRef.current?.getBoundingClientRect();
     if (!rect) return;
     const p = ((clientX - rect.left) / rect.width) * 100;
+    userInteracted.current = true;
     setPos(Math.max(0, Math.min(100, p)));
   };
 
