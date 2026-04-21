@@ -276,7 +276,10 @@ export function TransformationLightbox({
         </div>
 
         {/* INFO PANEL */}
-        <div className="relative p-6 md:p-8 lg:p-10 flex flex-col gap-6 overflow-y-auto bg-gradient-to-br from-background via-card to-background">
+        <div
+          key={contentKey}
+          className="relative p-6 md:p-8 lg:p-10 flex flex-col gap-6 overflow-y-auto bg-gradient-to-br from-background via-card to-background animate-fade-in"
+        >
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-[10px] uppercase tracking-[0.3em] text-primary font-bold mb-4">
               {tone} · Age {t.age}
