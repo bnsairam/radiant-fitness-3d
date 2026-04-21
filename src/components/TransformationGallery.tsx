@@ -136,7 +136,12 @@ export function TransformationGallery({ heading = true }: { heading?: boolean })
         </p>
       </div>
 
-      <TransformationLightbox t={openItem} onClose={() => setOpenItem(null)} />
+      <TransformationLightbox
+        t={openItem}
+        items={filtered}
+        onNavigate={setOpenItem}
+        onClose={() => setOpenItem(null)}
+      />
     </section>
   );
 }

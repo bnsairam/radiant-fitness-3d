@@ -14,37 +14,92 @@ import { useCountUp } from "@/hooks/use-reveal";
 export function TransformationLightbox({
   t,
   onClose,
+  items,
+  onNavigate,
 }: {
   t: Transformation | null;
   onClose: () => void;
+  /** Optional list to enable prev/next navigation inside the lightbox. */
+  items?: Transformation[];
+  onNavigate?: (next: Transformation) => void;
 }) {
-  const [pos, setPos] = useState(50);
+  const [pos, setPos] = useState(100);
   const [mounted, setMounted] = useState(false);
   const [show, setShow] = useState(false);
+  const [contentKey, setContentKey] = useState(0); // re-trigger counters on nav
   const sliderRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
+  const userInteracted = useRef(false);
 
   // Mount portal target only on client
   useEffect(() => setMounted(true), []);
 
-  // Animate in / out
-  useEffect(() => {
-    if (t) {
-      setPos(50);
-      // next frame so transition triggers
-      requestAnimationFrame(() => setShow(true));
-    } else {
-      setShow(false);
-    }
-  }, [t]);
+  // Index lookup for prev/next
+  const index = t && items ? items.findIndex((x) => x.name === t.name) : -1;
+  const canNav = !!items && items.length > 1 && index >= 0;
+  const goTo = (delta: number) => {
+    if (!canNav || !items) return;
+    const next = items[(index + delta + items.length) % items.length];
+    setContentKey((k) => k + 1);
+    onNavigate?.(next);
+  };
 
-  // ESC + body scroll lock
+  // Animate in + cinematic auto-reveal sweep (100% → 50%) on open / nav
+  useEffect(() => {
+    if (!t) {
+      setShow(false);
+      return;
+    }
+    userInteracted.current = false;
+    setPos(100); // start fully on "before"
+    requestAnimationFrame(() => setShow(true));
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      setPos(50);
+      return;
+    }
+
+    // Animate the slider from 100 → 50 with easeInOutCubic over ~1s
+    const duration = 1100;
+    const startDelay = 220; // wait for entrance to settle
+    const start = performance.now() + startDelay;
+    let raf = 0;
+    const tick = (now: number) => {
+      if (userInteracted.current) return; // user took over — stop the sweep
+      const elapsed = now - start;
+      if (elapsed < 0) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+      const p = Math.min(1, elapsed / duration);
+      const eased = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      setPos(100 - eased * 50); // 100 → 50
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [t, contentKey]);
+
+  // ESC + arrows + body scroll lock
   useEffect(() => {
     if (!t) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") setPos((p) => Math.max(0, p - 4));
-      if (e.key === "ArrowRight") setPos((p) => Math.min(100, p + 4));
+      if (e.key === "ArrowLeft") {
+        if (e.shiftKey && canNav) goTo(-1);
+        else {
+          userInteracted.current = true;
+          setPos((p) => Math.max(0, p - 4));
+        }
+      }
+      if (e.key === "ArrowRight") {
+        if (e.shiftKey && canNav) goTo(1);
+        else {
+          userInteracted.current = true;
+          setPos((p) => Math.min(100, p + 4));
+        }
+      }
     };
     document.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
@@ -53,7 +108,8 @@ export function TransformationLightbox({
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
     };
-  }, [t, onClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t, onClose, canNav, index]);
 
   const stats = parseStats(t?.caption ?? "", t?.detail ?? "");
 
@@ -66,6 +122,7 @@ export function TransformationLightbox({
     const rect = sliderRef.current?.getBoundingClientRect();
     if (!rect) return;
     const p = ((clientX - rect.left) / rect.width) * 100;
+    userInteracted.current = true;
     setPos(Math.max(0, Math.min(100, p)));
   };
 
@@ -120,11 +177,44 @@ export function TransformationLightbox({
           onClick={handleClose}
           aria-label="Close"
           className="absolute top-3 right-3 z-30 w-11 h-11 rounded-full bg-background/80 backdrop-blur border border-border hover:bg-accent hover:text-accent-foreground transition-all flex items-center justify-center"
+          data-cursor-label="Close"
         >
           <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
             <path d="M5 5L15 15M15 5L5 15" />
           </svg>
         </button>
+
+        {/* Prev / Next nav */}
+        {canNav && (
+          <>
+            <button
+              type="button"
+              onClick={() => goTo(-1)}
+              aria-label="Previous transformation"
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-background/80 backdrop-blur border border-border hover:bg-primary hover:text-primary-foreground hover:scale-110 transition-all flex items-center justify-center shadow-glow"
+              data-cursor-label="Prev"
+            >
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 4L6 10L12 16" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => goTo(1)}
+              aria-label="Next transformation"
+              className="absolute right-16 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-background/80 backdrop-blur border border-border hover:bg-primary hover:text-primary-foreground hover:scale-110 transition-all flex items-center justify-center shadow-glow"
+              data-cursor-label="Next"
+            >
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 4L14 10L8 16" />
+              </svg>
+            </button>
+            <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur border border-border text-[10px] uppercase tracking-[0.3em] font-bold text-muted-foreground">
+              <span className="text-accent">{index + 1}</span>
+              <span className="opacity-50"> / {items!.length}</span>
+            </div>
+          </>
+        )}
 
         {/* GIANT SLIDER */}
         <div
@@ -186,7 +276,10 @@ export function TransformationLightbox({
         </div>
 
         {/* INFO PANEL */}
-        <div className="relative p-6 md:p-8 lg:p-10 flex flex-col gap-6 overflow-y-auto bg-gradient-to-br from-background via-card to-background">
+        <div
+          key={contentKey}
+          className="relative p-6 md:p-8 lg:p-10 flex flex-col gap-6 overflow-y-auto bg-gradient-to-br from-background via-card to-background animate-fade-in"
+        >
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-[10px] uppercase tracking-[0.3em] text-primary font-bold mb-4">
               {tone} · Age {t.age}
