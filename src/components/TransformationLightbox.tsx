@@ -350,6 +350,63 @@ export function TransformationLightbox({
   return createPortal(node, document.body);
 }
 
+function ConfettiBurst() {
+  const particles = Array.from({ length: 18 }, (_, i) => {
+    const angle = (i / 18) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+    const distance = 70 + Math.random() * 70;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance;
+    const colors = [
+      "oklch(0.85 0.27 145)",
+      "oklch(0.66 0.21 245)",
+      "oklch(0.78 0.22 60)",
+      "oklch(0.95 0.05 145)",
+    ];
+    const color = colors[i % colors.length];
+    const size = 5 + Math.random() * 5;
+    const rot = Math.random() * 540;
+    const dur = 850 + Math.random() * 450;
+    return (
+      <span
+        key={i}
+        aria-hidden="true"
+        className="absolute top-1/2 left-1/2 rounded-[2px] pointer-events-none"
+        style={{
+          width: `${size}px`,
+          height: `${size}px`,
+          background: color,
+          boxShadow: `0 0 12px ${color}`,
+          ["--dx" as string]: `${dx}px`,
+          ["--dy" as string]: `${dy}px`,
+          ["--rot" as string]: `${rot}deg`,
+          animation: `confetti-fly ${dur}ms cubic-bezier(0.15,0.7,0.3,1) forwards`,
+        } as React.CSSProperties}
+      />
+    );
+  });
+  return (
+    <div className="absolute top-1/2 left-1/2 w-0 h-0 pointer-events-none">
+      <style>{`
+        @keyframes confetti-fly {
+          0% { transform: translate(-50%, -50%) scale(0.4) rotate(0deg); opacity: 1; }
+          70% { opacity: 1; }
+          100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1) rotate(var(--rot)); opacity: 0; }
+        }
+        @keyframes ring-pop {
+          0% { transform: translate(-50%,-50%) scale(0.2); opacity: 0.9; }
+          100% { transform: translate(-50%,-50%) scale(2.4); opacity: 0; }
+        }
+      `}</style>
+      <span
+        aria-hidden="true"
+        className="absolute top-1/2 left-1/2 w-20 h-20 rounded-full border-2 border-accent pointer-events-none"
+        style={{ animation: "ring-pop 700ms ease-out forwards" }}
+      />
+      {particles}
+    </div>
+  );
+}
+
 function Stat({
   value,
   unit,
