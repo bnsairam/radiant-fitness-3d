@@ -14,37 +14,92 @@ import { useCountUp } from "@/hooks/use-reveal";
 export function TransformationLightbox({
   t,
   onClose,
+  items,
+  onNavigate,
 }: {
   t: Transformation | null;
   onClose: () => void;
+  /** Optional list to enable prev/next navigation inside the lightbox. */
+  items?: Transformation[];
+  onNavigate?: (next: Transformation) => void;
 }) {
-  const [pos, setPos] = useState(50);
+  const [pos, setPos] = useState(100);
   const [mounted, setMounted] = useState(false);
   const [show, setShow] = useState(false);
+  const [contentKey, setContentKey] = useState(0); // re-trigger counters on nav
   const sliderRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
+  const userInteracted = useRef(false);
 
   // Mount portal target only on client
   useEffect(() => setMounted(true), []);
 
-  // Animate in / out
-  useEffect(() => {
-    if (t) {
-      setPos(50);
-      // next frame so transition triggers
-      requestAnimationFrame(() => setShow(true));
-    } else {
-      setShow(false);
-    }
-  }, [t]);
+  // Index lookup for prev/next
+  const index = t && items ? items.findIndex((x) => x.name === t.name) : -1;
+  const canNav = !!items && items.length > 1 && index >= 0;
+  const goTo = (delta: number) => {
+    if (!canNav || !items) return;
+    const next = items[(index + delta + items.length) % items.length];
+    setContentKey((k) => k + 1);
+    onNavigate?.(next);
+  };
 
-  // ESC + body scroll lock
+  // Animate in + cinematic auto-reveal sweep (100% → 50%) on open / nav
+  useEffect(() => {
+    if (!t) {
+      setShow(false);
+      return;
+    }
+    userInteracted.current = false;
+    setPos(100); // start fully on "before"
+    requestAnimationFrame(() => setShow(true));
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      setPos(50);
+      return;
+    }
+
+    // Animate the slider from 100 → 50 with easeInOutCubic over ~1s
+    const duration = 1100;
+    const startDelay = 220; // wait for entrance to settle
+    const start = performance.now() + startDelay;
+    let raf = 0;
+    const tick = (now: number) => {
+      if (userInteracted.current) return; // user took over — stop the sweep
+      const elapsed = now - start;
+      if (elapsed < 0) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+      const p = Math.min(1, elapsed / duration);
+      const eased = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      setPos(100 - eased * 50); // 100 → 50
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [t, contentKey]);
+
+  // ESC + arrows + body scroll lock
   useEffect(() => {
     if (!t) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") setPos((p) => Math.max(0, p - 4));
-      if (e.key === "ArrowRight") setPos((p) => Math.min(100, p + 4));
+      if (e.key === "ArrowLeft") {
+        if (e.shiftKey && canNav) goTo(-1);
+        else {
+          userInteracted.current = true;
+          setPos((p) => Math.max(0, p - 4));
+        }
+      }
+      if (e.key === "ArrowRight") {
+        if (e.shiftKey && canNav) goTo(1);
+        else {
+          userInteracted.current = true;
+          setPos((p) => Math.min(100, p + 4));
+        }
+      }
     };
     document.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
@@ -53,7 +108,8 @@ export function TransformationLightbox({
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
     };
-  }, [t, onClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t, onClose, canNav, index]);
 
   const stats = parseStats(t?.caption ?? "", t?.detail ?? "");
 
