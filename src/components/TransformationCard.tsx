@@ -21,9 +21,11 @@ export type Transformation = {
 export function TransformationCard({
   t,
   index,
+  onExpand,
 }: {
   t: Transformation;
   index: number;
+  onExpand?: (t: Transformation) => void;
 }) {
   const { ref, inView } = useInView<HTMLDivElement>(0.18);
   const cardRef = useRef<HTMLDivElement>(null);
