@@ -177,11 +177,44 @@ export function TransformationLightbox({
           onClick={handleClose}
           aria-label="Close"
           className="absolute top-3 right-3 z-30 w-11 h-11 rounded-full bg-background/80 backdrop-blur border border-border hover:bg-accent hover:text-accent-foreground transition-all flex items-center justify-center"
+          data-cursor-label="Close"
         >
           <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
             <path d="M5 5L15 15M15 5L5 15" />
           </svg>
         </button>
+
+        {/* Prev / Next nav */}
+        {canNav && (
+          <>
+            <button
+              type="button"
+              onClick={() => goTo(-1)}
+              aria-label="Previous transformation"
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-background/80 backdrop-blur border border-border hover:bg-primary hover:text-primary-foreground hover:scale-110 transition-all flex items-center justify-center shadow-glow"
+              data-cursor-label="Prev"
+            >
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 4L6 10L12 16" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => goTo(1)}
+              aria-label="Next transformation"
+              className="absolute right-16 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-background/80 backdrop-blur border border-border hover:bg-primary hover:text-primary-foreground hover:scale-110 transition-all flex items-center justify-center shadow-glow"
+              data-cursor-label="Next"
+            >
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 4L14 10L8 16" />
+              </svg>
+            </button>
+            <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur border border-border text-[10px] uppercase tracking-[0.3em] font-bold text-muted-foreground">
+              <span className="text-accent">{index + 1}</span>
+              <span className="opacity-50"> / {items!.length}</span>
+            </div>
+          </>
+        )}
 
         {/* GIANT SLIDER */}
         <div
