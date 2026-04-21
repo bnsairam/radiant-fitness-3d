@@ -32,6 +32,7 @@ type Mode = "grid" | "3d";
 export function TransformationGallery({ heading = true }: { heading?: boolean }) {
   const [active, setActive] = useState<Tab>("All");
   const [mode, setMode] = useState<Mode>("grid");
+  const [openItem, setOpenItem] = useState<Transformation | null>(null);
 
   const filtered =
     active === "All"
