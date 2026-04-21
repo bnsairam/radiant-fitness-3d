@@ -27,6 +27,7 @@ export function TransformationLightbox({
   const [mounted, setMounted] = useState(false);
   const [show, setShow] = useState(false);
   const [contentKey, setContentKey] = useState(0); // re-trigger counters on nav
+  const [burst, setBurst] = useState(0); // confetti trigger key
   const sliderRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const userInteracted = useRef(false);
@@ -76,6 +77,7 @@ export function TransformationLightbox({
       const eased = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
       setPos(100 - eased * 50); // 100 → 50
       if (p < 1) raf = requestAnimationFrame(tick);
+      else if (!userInteracted.current) setBurst((b) => b + 1); // celebrate the reveal
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
@@ -259,6 +261,7 @@ export function TransformationLightbox({
                 <path d="M7 5L2 10L7 15M13 5L18 10L13 15" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
+            {burst > 0 && <ConfettiBurst key={burst} />}
           </div>
 
           {/* Labels */}
@@ -345,6 +348,63 @@ export function TransformationLightbox({
   );
 
   return createPortal(node, document.body);
+}
+
+function ConfettiBurst() {
+  const particles = Array.from({ length: 18 }, (_, i) => {
+    const angle = (i / 18) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+    const distance = 70 + Math.random() * 70;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance;
+    const colors = [
+      "oklch(0.85 0.27 145)",
+      "oklch(0.66 0.21 245)",
+      "oklch(0.78 0.22 60)",
+      "oklch(0.95 0.05 145)",
+    ];
+    const color = colors[i % colors.length];
+    const size = 5 + Math.random() * 5;
+    const rot = Math.random() * 540;
+    const dur = 850 + Math.random() * 450;
+    return (
+      <span
+        key={i}
+        aria-hidden="true"
+        className="absolute top-1/2 left-1/2 rounded-[2px] pointer-events-none"
+        style={{
+          width: `${size}px`,
+          height: `${size}px`,
+          background: color,
+          boxShadow: `0 0 12px ${color}`,
+          ["--dx" as string]: `${dx}px`,
+          ["--dy" as string]: `${dy}px`,
+          ["--rot" as string]: `${rot}deg`,
+          animation: `confetti-fly ${dur}ms cubic-bezier(0.15,0.7,0.3,1) forwards`,
+        } as React.CSSProperties}
+      />
+    );
+  });
+  return (
+    <div className="absolute top-1/2 left-1/2 w-0 h-0 pointer-events-none">
+      <style>{`
+        @keyframes confetti-fly {
+          0% { transform: translate(-50%, -50%) scale(0.4) rotate(0deg); opacity: 1; }
+          70% { opacity: 1; }
+          100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1) rotate(var(--rot)); opacity: 0; }
+        }
+        @keyframes ring-pop {
+          0% { transform: translate(-50%,-50%) scale(0.2); opacity: 0.9; }
+          100% { transform: translate(-50%,-50%) scale(2.4); opacity: 0; }
+        }
+      `}</style>
+      <span
+        aria-hidden="true"
+        className="absolute top-1/2 left-1/2 w-20 h-20 rounded-full border-2 border-accent pointer-events-none"
+        style={{ animation: "ring-pop 700ms ease-out forwards" }}
+      />
+      {particles}
+    </div>
+  );
 }
 
 function Stat({
