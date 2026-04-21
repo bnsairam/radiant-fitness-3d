@@ -307,6 +307,7 @@ export function CarouselCarousel({
                   zIndex: Math.round(1000 - absRel),
                 }}
                 active={isActive}
+                onExpand={onExpand}
               />
             );
           })}
