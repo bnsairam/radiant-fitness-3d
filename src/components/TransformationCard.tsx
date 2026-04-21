@@ -158,6 +158,26 @@ export function TransformationCard({
                 After
               </div>
 
+              {/* Expand to lightbox */}
+              {onExpand && (
+                <button
+                  type="button"
+                  aria-label={`Open fullscreen view of ${t.name}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onExpand(t);
+                  }}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onTouchStart={(e) => e.stopPropagation()}
+                  className="absolute top-14 right-3 w-9 h-9 rounded-full bg-background/85 backdrop-blur border border-border hover:bg-accent hover:text-accent-foreground hover:scale-110 transition-all flex items-center justify-center z-20"
+                  data-cursor-label="Open"
+                >
+                  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 8V3H8M17 8V3H12M3 12V17H8M17 12V17H12" />
+                  </svg>
+                </button>
+              )}
+
               {/* Caption pill */}
               <div className="absolute bottom-4 left-4 right-4">
                 <div className="inline-block px-3 py-1.5 rounded-full bg-background/80 backdrop-blur border border-primary/40 text-[10px] uppercase tracking-[0.25em] text-primary font-bold mb-2">
