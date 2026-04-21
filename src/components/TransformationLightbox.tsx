@@ -77,6 +77,7 @@ export function TransformationLightbox({
       const eased = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
       setPos(100 - eased * 50); // 100 → 50
       if (p < 1) raf = requestAnimationFrame(tick);
+      else if (!userInteracted.current) setBurst((b) => b + 1); // celebrate the reveal
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
