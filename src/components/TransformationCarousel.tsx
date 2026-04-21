@@ -421,11 +421,13 @@ function CarouselCard({
   width,
   style,
   active,
+  onExpand,
 }: {
   t: Transformation;
   width: number;
   style: CSSProperties;
   active: boolean;
+  onExpand?: (t: Transformation) => void;
 }) {
   return (
     <article
