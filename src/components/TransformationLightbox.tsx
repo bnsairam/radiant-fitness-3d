@@ -261,6 +261,7 @@ export function TransformationLightbox({
                 <path d="M7 5L2 10L7 15M13 5L18 10L13 15" stroke="white" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
+            {burst > 0 && <ConfettiBurst key={burst} />}
           </div>
 
           {/* Labels */}
