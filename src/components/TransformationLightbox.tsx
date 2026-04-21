@@ -27,6 +27,7 @@ export function TransformationLightbox({
   const [mounted, setMounted] = useState(false);
   const [show, setShow] = useState(false);
   const [contentKey, setContentKey] = useState(0); // re-trigger counters on nav
+  const [burst, setBurst] = useState(0); // confetti trigger key
   const sliderRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const userInteracted = useRef(false);
