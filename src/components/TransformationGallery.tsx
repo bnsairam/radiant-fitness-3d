@@ -135,6 +135,8 @@ export function TransformationGallery({ heading = true }: { heading?: boolean })
           Upload your real before/after photos to <code className="text-accent">src/assets/</code> and link them in <code className="text-accent">TransformationGallery.tsx</code> — the cards will automatically use them.
         </p>
       </div>
+
+      <TransformationLightbox t={openItem} onClose={() => setOpenItem(null)} />
     </section>
   );
 }
