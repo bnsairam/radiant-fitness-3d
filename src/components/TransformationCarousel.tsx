@@ -15,7 +15,13 @@ import type { Transformation } from "./TransformationCard";
  * - Auto-rotates only when fully idle, pauses on any interaction
  * - Respects prefers-reduced-motion (no auto-spin, instant snaps)
  */
-export function CarouselCarousel({ items }: { items: Transformation[] }) {
+export function CarouselCarousel({
+  items,
+  onExpand,
+}: {
+  items: Transformation[];
+  onExpand?: (t: Transformation) => void;
+}) {
   const N = items.length;
   const stage = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
