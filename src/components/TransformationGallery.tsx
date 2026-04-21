@@ -123,11 +123,11 @@ export function TransformationGallery({ heading = true }: { heading?: boolean })
         {mode === "grid" ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-9">
             {filtered.map((t, i) => (
-              <TransformationCard key={t.name} t={t} index={i} />
+              <TransformationCard key={t.name} t={t} index={i} onExpand={setOpenItem} />
             ))}
           </div>
         ) : (
-          <CarouselCarousel key={active} items={filtered} />
+          <CarouselCarousel key={active} items={filtered} onExpand={setOpenItem} />
         )}
 
         {/* Note for owner */}
