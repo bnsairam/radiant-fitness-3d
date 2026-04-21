@@ -15,7 +15,13 @@ import type { Transformation } from "./TransformationCard";
  * - Auto-rotates only when fully idle, pauses on any interaction
  * - Respects prefers-reduced-motion (no auto-spin, instant snaps)
  */
-export function CarouselCarousel({ items }: { items: Transformation[] }) {
+export function CarouselCarousel({
+  items,
+  onExpand,
+}: {
+  items: Transformation[];
+  onExpand?: (t: Transformation) => void;
+}) {
   const N = items.length;
   const stage = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -301,6 +307,7 @@ export function CarouselCarousel({ items }: { items: Transformation[] }) {
                   zIndex: Math.round(1000 - absRel),
                 }}
                 active={isActive}
+                onExpand={onExpand}
               />
             );
           })}
@@ -414,11 +421,13 @@ function CarouselCard({
   width,
   style,
   active,
+  onExpand,
 }: {
   t: Transformation;
   width: number;
   style: CSSProperties;
   active: boolean;
+  onExpand?: (t: Transformation) => void;
 }) {
   return (
     <article
@@ -461,6 +470,25 @@ function CarouselCard({
         <div className="absolute top-3 right-3 px-2 py-0.5 rounded bg-accent text-accent-foreground text-[9px] uppercase tracking-[0.25em] font-bold">
           After
         </div>
+
+        {/* Expand button — only on active card so background cards stay clean */}
+        {active && onExpand && (
+          <button
+            type="button"
+            aria-label={`Open fullscreen view of ${t.name}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onExpand(t);
+            }}
+            onPointerDown={(e) => e.stopPropagation()}
+            className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-background/85 backdrop-blur border border-accent/50 hover:bg-accent hover:text-accent-foreground hover:scale-110 transition-all flex items-center justify-center z-30 shadow-glow"
+            data-cursor-label="Open"
+          >
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 8V3H8M17 8V3H12M3 12V17H8M17 12V17H12" />
+            </svg>
+          </button>
+        )}
 
         {/* Top spotlight */}
         <div

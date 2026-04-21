@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TransformationCard, type Transformation } from "./TransformationCard";
 import { CarouselCarousel } from "./TransformationCarousel";
+import { TransformationLightbox } from "./TransformationLightbox";
 
 import b1 from "@/assets/champion-1-before.jpg";
 import a1 from "@/assets/champion-1-after.jpg";
@@ -31,6 +32,7 @@ type Mode = "grid" | "3d";
 export function TransformationGallery({ heading = true }: { heading?: boolean }) {
   const [active, setActive] = useState<Tab>("All");
   const [mode, setMode] = useState<Mode>("grid");
+  const [openItem, setOpenItem] = useState<Transformation | null>(null);
 
   const filtered =
     active === "All"
@@ -121,11 +123,11 @@ export function TransformationGallery({ heading = true }: { heading?: boolean })
         {mode === "grid" ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-9">
             {filtered.map((t, i) => (
-              <TransformationCard key={t.name} t={t} index={i} />
+              <TransformationCard key={t.name} t={t} index={i} onExpand={setOpenItem} />
             ))}
           </div>
         ) : (
-          <CarouselCarousel key={active} items={filtered} />
+          <CarouselCarousel key={active} items={filtered} onExpand={setOpenItem} />
         )}
 
         {/* Note for owner */}
@@ -133,6 +135,8 @@ export function TransformationGallery({ heading = true }: { heading?: boolean })
           Upload your real before/after photos to <code className="text-accent">src/assets/</code> and link them in <code className="text-accent">TransformationGallery.tsx</code> — the cards will automatically use them.
         </p>
       </div>
+
+      <TransformationLightbox t={openItem} onClose={() => setOpenItem(null)} />
     </section>
   );
 }
