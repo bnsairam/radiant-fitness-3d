@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TransformationCard, type Transformation } from "./TransformationCard";
 import { CarouselCarousel } from "./TransformationCarousel";
+import { TransformationLightbox } from "./TransformationLightbox";
 
 import b1 from "@/assets/champion-1-before.jpg";
 import a1 from "@/assets/champion-1-after.jpg";
