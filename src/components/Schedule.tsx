@@ -42,7 +42,7 @@ const SCHEDULE = [
 
 export function Schedule({ heading = true }: { heading?: boolean }) {
   return (
-    <section className="relative py-24 md:py-28">
+    <section id="schedule" className="relative py-24 md:py-28">
       <div className="container mx-auto px-5">
         {heading && (
           <div className="max-w-3xl mb-12">

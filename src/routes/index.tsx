@@ -4,10 +4,12 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { StickyCTA } from "@/components/StickyCTA";
 import { Hero } from "@/components/Hero";
 import { Marquee } from "@/components/Marquee";
+import { AboutSection } from "@/components/AboutSection";
 import { Services } from "@/components/Services";
 import { TransformationGallery } from "@/components/TransformationGallery";
-import { Trainers } from "@/components/Trainers";
 import { Pricing } from "@/components/Pricing";
+import { Trainers } from "@/components/Trainers";
+import { Schedule } from "@/components/Schedule";
 import { Testimonials } from "@/components/Testimonials";
 import { ContactSection } from "@/components/ContactSection";
 import { SectionDivider } from "@/components/SectionDivider";
@@ -41,13 +43,17 @@ function Index() {
       <SiteHeader />
       <Hero />
       <Marquee />
+      <AboutSection />
+      <SectionDivider />
       <Services />
       <SectionDivider />
       <TransformationGallery />
       <SectionDivider />
-      <Trainers />
       <Pricing />
       <SectionDivider />
+      <Trainers />
+      <SectionDivider />
+      <Schedule />
       <Testimonials />
       <ContactSection />
       <SiteFooter />

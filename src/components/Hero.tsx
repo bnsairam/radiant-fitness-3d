@@ -4,7 +4,7 @@ import { ThreeScene } from "./ThreeScene";
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen w-full overflow-hidden flex items-center justify-center noise">
+    <section id="home" className="relative min-h-screen w-full overflow-hidden flex items-center justify-center noise">
       {/* Animated aurora mesh */}
       <div aria-hidden="true" className="absolute inset-0 z-[1] aurora pointer-events-none" />
       {/* Moving grid floor */}
