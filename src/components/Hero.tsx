@@ -1,8 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import heroGym from "@/assets/hero-gym.jpg";
 import { ThreeScene } from "./ThreeScene";
+import { TRIAL_MESSAGE, whatsappLink } from "@/lib/whatsapp";
 
 export function Hero() {
+  const trialUrl = whatsappLink(TRIAL_MESSAGE);
+
   return (
     <section id="home" className="relative min-h-screen w-full overflow-hidden flex items-center justify-center noise">
       {/* Animated aurora mesh */}
@@ -50,12 +53,17 @@ export function Hero() {
           </p>
 
           <div className="flex flex-wrap gap-4">
-            <Link
-              to="/contact"
-              className="group relative inline-flex items-center justify-center bg-gradient-flame text-white px-8 py-4 rounded-md font-bold tracking-wider uppercase text-sm shadow-flame hover:shadow-glow transition-all overflow-hidden"
+            <a
+              href={trialUrl}
+              target="_blank"
+              rel="noopener"
+              className="group relative inline-flex items-center justify-center gap-2 bg-gradient-flame text-white px-8 py-4 rounded-md font-bold tracking-wider uppercase text-sm shadow-flame hover:shadow-glow transition-all overflow-hidden glow-ring"
             >
-              <span className="relative z-10">Claim Your Free Trial</span>
-            </Link>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <path d="M19.05 4.91A10 10 0 0 0 3.1 17.7L2 22l4.4-1.15a10 10 0 0 0 4.79 1.22A10 10 0 0 0 19.05 4.9zM12.2 20.3a8.31 8.31 0 0 1-4.24-1.16l-.3-.18-2.6.68.7-2.54-.2-.32a8.32 8.32 0 1 1 6.64 3.52z" />
+              </svg>
+              <span className="relative z-10">Claim Free Trial</span>
+            </a>
             <Link
               to="/pricing"
               className="inline-flex items-center justify-center border border-primary/50 hover:border-primary text-foreground px-8 py-4 rounded-md font-bold tracking-wider uppercase text-sm hover:bg-primary/10 transition-all"
