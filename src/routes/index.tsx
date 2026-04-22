@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { StickyCTA } from "@/components/StickyCTA";
 import { Hero } from "@/components/Hero";
 import { Marquee } from "@/components/Marquee";
+import { StatsBand } from "@/components/StatsBand";
 import { AboutSection } from "@/components/AboutSection";
 import { Services } from "@/components/Services";
 import { TransformationGallery } from "@/components/TransformationGallery";
@@ -13,6 +14,7 @@ import { Schedule } from "@/components/Schedule";
 import { Testimonials } from "@/components/Testimonials";
 import { ContactSection } from "@/components/ContactSection";
 import { SectionDivider } from "@/components/SectionDivider";
+import { SectionReveal } from "@/components/SectionReveal";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -43,19 +45,20 @@ function Index() {
       <SiteHeader />
       <Hero />
       <Marquee />
-      <AboutSection />
+      <StatsBand />
+      <SectionReveal><AboutSection /></SectionReveal>
       <SectionDivider />
-      <Services />
+      <SectionReveal><Services /></SectionReveal>
       <SectionDivider />
-      <TransformationGallery />
+      <SectionReveal><TransformationGallery /></SectionReveal>
       <SectionDivider />
-      <Pricing />
+      <SectionReveal><Pricing /></SectionReveal>
       <SectionDivider />
       <Trainers />
       <SectionDivider />
-      <Schedule />
-      <Testimonials />
-      <ContactSection />
+      <SectionReveal><Schedule /></SectionReveal>
+      <SectionReveal><Testimonials /></SectionReveal>
+      <SectionReveal><ContactSection /></SectionReveal>
       <SiteFooter />
       <StickyCTA />
     </main>

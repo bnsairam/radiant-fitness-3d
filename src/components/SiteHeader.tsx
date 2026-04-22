@@ -143,13 +143,19 @@ export function SiteHeader() {
         </ul>
 
         <div className="flex items-center gap-2 shrink-0">
-          <Link
-            to="/contact"
-            onClick={handleNavClick(links[links.length - 1])}
-            className="hidden sm:inline-flex whitespace-nowrap bg-accent text-accent-foreground px-4 py-2.5 rounded-md font-bold tracking-wider uppercase text-[11px] hover:shadow-neon transition-all"
+          <a
+            href={`https://wa.me/919941942942?text=${encodeURIComponent(
+              "Hi Total Fitness Studio! 👋 I'd like to claim my FREE trial session at your Chromepet studio. Please share the next available slot. — sent from your website",
+            )}`}
+            target="_blank"
+            rel="noopener"
+            className="hidden sm:inline-flex whitespace-nowrap items-center gap-2 bg-accent text-accent-foreground px-4 py-2.5 rounded-md font-bold tracking-wider uppercase text-[11px] hover:shadow-neon transition-all"
           >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <path d="M19.05 4.91A10 10 0 0 0 3.1 17.7L2 22l4.4-1.15a10 10 0 0 0 4.79 1.22A10 10 0 0 0 19.05 4.9zM12.2 20.3a8.31 8.31 0 0 1-4.24-1.16l-.3-.18-2.6.68.7-2.54-.2-.32a8.32 8.32 0 1 1 6.64 3.52z" />
+            </svg>
             Free Trial
-          </Link>
+          </a>
           <button
             type="button"
             aria-label="Toggle menu"
