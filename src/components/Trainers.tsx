@@ -79,10 +79,9 @@ export function Trainers({ heading = true }: { heading?: boolean }) {
               style={{ ["--i" as never]: i }}
               className="flip-card group relative rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
             >
-              <div className="relative aspect-[3/4]">
-                <div className="flip-inner rounded-2xl">
-                  {/* FRONT */}
-                  <div className="flip-face rounded-2xl overflow-hidden border border-border bg-card shadow-lg">
+              <div className="relative aspect-[3/4] flip-inner rounded-2xl">
+                {/* FRONT */}
+                <div className="flip-face rounded-2xl overflow-hidden border border-border bg-card shadow-lg">
                     <img
                       src={t.img}
                       alt={`Trainer ${t.name}`}
