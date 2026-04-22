@@ -334,6 +334,7 @@
   syntax: "<angle>";
   initial-value: 0deg;
   inherits: false;
+}
 
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 30px oklch(0.66 0.21 245 / 0.4), 0 0 60px oklch(0.66 0.21 245 / 0.2); }
