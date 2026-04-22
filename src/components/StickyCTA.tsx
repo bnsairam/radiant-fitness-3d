@@ -1,5 +1,6 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { TRIAL_MESSAGE, whatsappLink } from "@/lib/whatsapp";
 
 /** Floating sticky CTAs — Free Trial + WhatsApp on every page (except /contact). */
 export function StickyCTA() {
@@ -16,6 +17,11 @@ export function StickyCTA() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const trialUrl = whatsappLink(TRIAL_MESSAGE);
+  const chatUrl = whatsappLink(
+    "Hi Total Fitness Studio! I'd like to know more about your programs.",
+  );
+
   return (
     <div
       className={`fixed z-40 right-4 bottom-4 sm:right-6 sm:bottom-6 flex flex-col items-end gap-3 pointer-events-none transition-all duration-500 ${
@@ -24,7 +30,7 @@ export function StickyCTA() {
       aria-hidden={!show}
     >
       <a
-        href="https://wa.me/919999999999"
+        href={chatUrl}
         target="_blank"
         rel="noopener"
         aria-label="Chat on WhatsApp"
@@ -35,13 +41,15 @@ export function StickyCTA() {
         </svg>
       </a>
       {!hideTrialPill && (
-        <Link
-          to="/contact"
+        <a
+          href={trialUrl}
+          target="_blank"
+          rel="noopener"
           className="pointer-events-auto inline-flex items-center gap-2 bg-gradient-flame text-white px-5 py-3 rounded-full shadow-flame font-bold tracking-wider uppercase text-xs hover:scale-105 transition-transform"
         >
           <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
           Free Trial
-        </Link>
+        </a>
       )}
     </div>
   );
