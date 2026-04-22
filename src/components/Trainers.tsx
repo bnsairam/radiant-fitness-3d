@@ -81,7 +81,7 @@ export function Trainers({ heading = true }: { heading?: boolean }) {
             >
               <div className="relative aspect-[3/4] flip-inner rounded-2xl">
                 {/* FRONT */}
-                <div className="flip-face rounded-2xl overflow-hidden border border-border bg-card shadow-lg">
+                <div className="flip-face flip-front rounded-2xl overflow-hidden border border-border bg-card shadow-lg">
                     <img
                       src={t.img}
                       alt={`Trainer ${t.name}`}
