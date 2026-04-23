@@ -21,6 +21,16 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
       return;
     }
 
+    // If the element is already in/near the viewport on mount (e.g. above the
+    // fold on first paint, or after a fast scroll-restore), reveal immediately
+    // so the user never sees an empty placeholder.
+    const rect = el.getBoundingClientRect();
+    const vh = window.innerHeight || 0;
+    if (rect.top < vh * 0.9) {
+      setRevealed(true);
+      return;
+    }
+
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -28,7 +38,7 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
           obs.disconnect();
         }
       },
-      { threshold, rootMargin: "0px 0px -8% 0px" },
+      { threshold, rootMargin: "0px 0px -5% 0px" },
     );
     obs.observe(el);
     return () => obs.disconnect();

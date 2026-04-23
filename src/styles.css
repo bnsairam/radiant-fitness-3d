@@ -245,17 +245,25 @@
   /* Scroll reveal — apply with .reveal, toggle .is-revealed via useReveal() */
   .reveal {
     opacity: 0;
-    transform: translateY(36px);
+    transform: translateY(24px);
     transition:
-      opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1),
-      transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+      opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+      transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
     will-change: opacity, transform;
   }
   .reveal.is-revealed {
     opacity: 1;
     transform: translateY(0);
   }
-  .reveal-stagger > * { transition-delay: calc(var(--i, 0) * 80ms); }
+  .reveal-stagger > * { transition-delay: calc(var(--i, 0) * 60ms); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal,
+    .reveal.is-revealed { opacity: 1; transform: none; transition: none; }
+    .aurora,
+    .grid-floor,
+    .text-gradient-animated { animation: none !important; }
+  }
 
   /* Sporty animated underline for big section eyebrows */
   .eyebrow-line {
