@@ -23,6 +23,9 @@ export function Hero() {
           alt="Total Fitness Studio interior — premium gym in Chromepet, Chennai"
           width={1920}
           height={1080}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
           className="w-full h-full object-cover opacity-55"
         />
         <div className="absolute inset-0 bg-gradient-hero" />
