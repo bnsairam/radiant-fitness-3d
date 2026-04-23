@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { WHATSAPP_NUMBER, WHATSAPP_DISPLAY, whatsappLink } from "@/lib/whatsapp";
 
 export function SiteFooter() {
   return (
@@ -47,8 +48,8 @@ export function SiteFooter() {
         <div>
           <div className="text-[10px] uppercase tracking-[0.3em] text-primary mb-4">Connect</div>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><a href="tel:+919999999999" className="hover:text-primary">+91 99999 99999</a></li>
-            <li><a href="https://wa.me/919999999999" target="_blank" rel="noopener" className="hover:text-accent">WhatsApp Chat</a></li>
+            <li><a href={`tel:+${WHATSAPP_NUMBER}`} className="hover:text-primary">{WHATSAPP_DISPLAY}</a></li>
+            <li><a href={whatsappLink("Hi Total Fitness Studio! I'd like to know more.")} target="_blank" rel="noopener" className="hover:text-accent">WhatsApp Chat</a></li>
             <li><a href="https://instagram.com" target="_blank" rel="noopener" className="hover:text-primary">Instagram</a></li>
             <li><a href="mailto:hello@totalfitstudio.in" className="hover:text-primary">hello@totalfitstudio.in</a></li>
           </ul>
