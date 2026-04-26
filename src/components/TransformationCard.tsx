@@ -1,5 +1,6 @@
 import { useRef, useState, type CSSProperties } from "react";
 import { useInView } from "@/hooks/use-reveal";
+import { whatsappLink } from "@/lib/whatsapp";
 
 export type Transformation = {
   name: string;
@@ -192,21 +193,41 @@ export function TransformationCard({
 
             {/* Footer strip */}
             <div className="px-5 py-4 flex items-center justify-between gap-3 border-t border-border bg-background/60 backdrop-blur">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-electric flex items-center justify-center font-display text-base shadow-glow">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-full bg-gradient-electric flex items-center justify-center font-display text-base shadow-glow shrink-0">
                   {t.initial}
                 </div>
-                <div className="leading-tight">
-                  <div className="font-display text-base">{t.name}</div>
-                  <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+                <div className="leading-tight min-w-0">
+                  <div className="font-display text-base truncate">{t.name}</div>
+                  <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground truncate">
                     {t.program}
                   </div>
                 </div>
               </div>
-              <div className="text-[10px] uppercase tracking-[0.25em] text-accent font-bold">
+              <div className="text-[10px] uppercase tracking-[0.25em] text-accent font-bold shrink-0">
                 Verified ✓
               </div>
             </div>
+
+            {/* Program-specific WhatsApp inquiry CTA */}
+            <a
+              href={whatsappLink(
+                `Hi Total Fitness Studio! 👋 I saw ${t.name}'s transformation (${t.caption}) on your website and I'm interested in the *${t.program}* program. Could you share details, pricing & next batch availability? — sent from your website`,
+              )}
+              target="_blank"
+              rel="noopener"
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
+              className="group/cta relative flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-flame text-white font-bold uppercase tracking-[0.18em] text-[11px] hover:shadow-flame transition-all overflow-hidden"
+              data-cursor-label="WhatsApp"
+            >
+              <span aria-hidden className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="relative">
+                <path d="M19.05 4.91A10 10 0 0 0 3.1 17.7L2 22l4.4-1.15a10 10 0 0 0 4.79 1.22A10 10 0 0 0 19.05 4.9zM12.2 20.3a8.31 8.31 0 0 1-4.24-1.16l-.3-.18-2.6.68.7-2.54-.2-.32a8.32 8.32 0 1 1 6.64 3.52z" />
+              </svg>
+              <span className="relative">Inquire about {t.program}</span>
+            </a>
           </div>
         </div>
       </article>

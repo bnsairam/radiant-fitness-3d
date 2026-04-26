@@ -130,10 +130,6 @@ export function TransformationGallery({ heading = true }: { heading?: boolean })
           <CarouselCarousel key={active} items={filtered} onExpand={setOpenItem} />
         )}
 
-        {/* Note for owner */}
-        <p className="text-xs text-center text-muted-foreground/60 mt-10 italic">
-          Upload your real before/after photos to <code className="text-accent">src/assets/</code> and link them in <code className="text-accent">TransformationGallery.tsx</code> — the cards will automatically use them.
-        </p>
       </div>
 
       <TransformationLightbox
