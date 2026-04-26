@@ -1,5 +1,6 @@
 import { useRef, useState, type CSSProperties } from "react";
 import { useInView } from "@/hooks/use-reveal";
+import { whatsappLink } from "@/lib/whatsapp";
 
 export type Transformation = {
   name: string;
