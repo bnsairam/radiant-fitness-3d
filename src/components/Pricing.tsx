@@ -77,7 +77,7 @@ export function Pricing({ heading = true }: { heading?: boolean }) {
           </div>
         )}
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 [&>*:nth-child(4)]:sm:col-start-1 [&>*:nth-child(4)]:lg:col-start-auto xl:[&>*]:col-start-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
           {PLANS.map((p) => (
             <article
               key={p.name}
