@@ -54,10 +54,12 @@ function Index() {
       <SectionDivider />
       <SectionReveal><Pricing /></SectionReveal>
       <SectionDivider />
-      <Trainers />
+      <SectionReveal><Trainers /></SectionReveal>
       <SectionDivider />
       <SectionReveal><Schedule /></SectionReveal>
+      <SectionDivider />
       <SectionReveal><Testimonials /></SectionReveal>
+      <SectionDivider />
       <SectionReveal><ContactSection /></SectionReveal>
       <SiteFooter />
       <StickyCTA />
