@@ -77,14 +77,14 @@ export function Pricing({ heading = true }: { heading?: boolean }) {
           </div>
         )}
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 pb-28 lg:pb-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 [&>*:nth-child(4)]:sm:col-start-1 [&>*:nth-child(4)]:lg:col-start-auto xl:[&>*]:col-start-auto">
           {PLANS.map((p) => (
             <article
               key={p.name}
-              className={`relative rounded-2xl p-6 flex flex-col border transition-all hover:-translate-y-1.5 ${
+              className={`relative rounded-2xl p-6 pt-7 flex flex-col border transition-all duration-300 hover:-translate-y-1.5 ${
                 p.featured
-                  ? "bg-gradient-electric text-primary-foreground border-accent shadow-glow scale-[1.02] lg:scale-105"
-                  : "bg-card border-border hover:border-primary/60"
+                  ? "bg-gradient-electric text-primary-foreground border-accent shadow-glow sm:col-span-2 lg:col-span-1 lg:scale-[1.04] xl:scale-105"
+                  : "bg-card border-border hover:border-primary/60 hover:shadow-glow/40"
               }`}
             >
               {p.featured && (
