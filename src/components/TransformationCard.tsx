@@ -1,6 +1,8 @@
 import { useRef, useState, type CSSProperties } from "react";
 import { useInView } from "@/hooks/use-reveal";
-import { whatsappLink } from "@/lib/whatsapp";
+import { whatsappLinkWithTags } from "@/lib/whatsapp";
+import { shareTransformation } from "@/lib/share";
+import { toast } from "sonner";
 
 export type Transformation = {
   name: string;
@@ -209,25 +211,35 @@ export function TransformationCard({
               </div>
             </div>
 
-            {/* Program-specific WhatsApp inquiry CTA */}
-            <a
-              href={whatsappLink(
-                `Hi Total Fitness Studio! 👋 I saw ${t.name}'s transformation (${t.caption}) on your website and I'm interested in the *${t.program}* program. Could you share details, pricing & next batch availability? — sent from your website`,
-              )}
-              target="_blank"
-              rel="noopener"
-              onMouseDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
-              onClick={(e) => e.stopPropagation()}
-              className="group/cta relative flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-flame text-white font-bold uppercase tracking-[0.18em] text-[11px] hover:shadow-flame transition-all overflow-hidden"
-              data-cursor-label="WhatsApp"
-            >
-              <span aria-hidden className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="relative">
-                <path d="M19.05 4.91A10 10 0 0 0 3.1 17.7L2 22l4.4-1.15a10 10 0 0 0 4.79 1.22A10 10 0 0 0 19.05 4.9zM12.2 20.3a8.31 8.31 0 0 1-4.24-1.16l-.3-.18-2.6.68.7-2.54-.2-.32a8.32 8.32 0 1 1 6.64 3.52z" />
-              </svg>
-              <span className="relative">Inquire about {t.program}</span>
-            </a>
+            {/* CTA row: WhatsApp inquiry + Share */}
+            <div className="flex items-stretch border-t border-border/60">
+              <a
+                href={whatsappLinkWithTags(
+                  `Hi Total Fitness Studio! 👋 I saw ${t.name}'s transformation (${t.caption}) on your website and I'm interested in the *${t.program}* program. Could you share details, pricing & next batch availability?`,
+                  {
+                    source: "transformation_card",
+                    campaign: "hall_of_champions",
+                    program: t.program,
+                    member: t.name,
+                    extra: { tag: t.tag, age: String(t.age) },
+                  },
+                )}
+                target="_blank"
+                rel="noopener"
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
+                className="group/cta relative flex-1 flex items-center justify-center gap-2 py-3.5 bg-gradient-flame text-white font-bold uppercase tracking-[0.18em] text-[11px] hover:shadow-flame transition-all overflow-hidden"
+                data-cursor-label="WhatsApp"
+              >
+                <span aria-hidden className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="relative">
+                  <path d="M19.05 4.91A10 10 0 0 0 3.1 17.7L2 22l4.4-1.15a10 10 0 0 0 4.79 1.22A10 10 0 0 0 19.05 4.9zM12.2 20.3a8.31 8.31 0 0 1-4.24-1.16l-.3-.18-2.6.68.7-2.54-.2-.32a8.32 8.32 0 1 1 6.64 3.52z" />
+                </svg>
+                <span className="relative truncate">Inquire about {t.program}</span>
+              </a>
+              <ShareButton t={t} />
+            </div>
           </div>
         </div>
       </article>
