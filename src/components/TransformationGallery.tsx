@@ -157,6 +157,28 @@ export function TransformationGallery({ heading = true }: { heading?: boolean })
           </div>
         </div>
 
+        {/* Results status */}
+        <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-6">
+          <div>
+            Showing <span className="text-foreground font-bold">{filtered.length}</span>
+            {active !== "All" && (
+              <>
+                {" "}of <span className="text-foreground font-bold">{TRANSFORMATIONS.length}</span>
+                {" "}· filter: <span className="text-accent font-bold">{active}</span>
+              </>
+            )}
+          </div>
+          {active !== "All" && (
+            <button
+              type="button"
+              onClick={() => setActive("All")}
+              className="text-accent hover:text-primary transition-colors font-bold"
+            >
+              Clear filters →
+            </button>
+          )}
+        </div>
+
         {/* View */}
         {mode === "grid" ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-9">
