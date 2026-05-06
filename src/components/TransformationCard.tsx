@@ -1,6 +1,8 @@
 import { useRef, useState, type CSSProperties } from "react";
 import { useInView } from "@/hooks/use-reveal";
-import { whatsappLink } from "@/lib/whatsapp";
+import { whatsappLinkWithTags } from "@/lib/whatsapp";
+import { shareTransformation } from "@/lib/share";
+import { toast } from "sonner";
 
 export type Transformation = {
   name: string;
@@ -209,25 +211,35 @@ export function TransformationCard({
               </div>
             </div>
 
-            {/* Program-specific WhatsApp inquiry CTA */}
-            <a
-              href={whatsappLink(
-                `Hi Total Fitness Studio! 👋 I saw ${t.name}'s transformation (${t.caption}) on your website and I'm interested in the *${t.program}* program. Could you share details, pricing & next batch availability? — sent from your website`,
-              )}
-              target="_blank"
-              rel="noopener"
-              onMouseDown={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
-              onClick={(e) => e.stopPropagation()}
-              className="group/cta relative flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-flame text-white font-bold uppercase tracking-[0.18em] text-[11px] hover:shadow-flame transition-all overflow-hidden"
-              data-cursor-label="WhatsApp"
-            >
-              <span aria-hidden className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="relative">
-                <path d="M19.05 4.91A10 10 0 0 0 3.1 17.7L2 22l4.4-1.15a10 10 0 0 0 4.79 1.22A10 10 0 0 0 19.05 4.9zM12.2 20.3a8.31 8.31 0 0 1-4.24-1.16l-.3-.18-2.6.68.7-2.54-.2-.32a8.32 8.32 0 1 1 6.64 3.52z" />
-              </svg>
-              <span className="relative">Inquire about {t.program}</span>
-            </a>
+            {/* CTA row: WhatsApp inquiry + Share */}
+            <div className="flex items-stretch border-t border-border/60">
+              <a
+                href={whatsappLinkWithTags(
+                  `Hi Total Fitness Studio! 👋 I saw ${t.name}'s transformation (${t.caption}) on your website and I'm interested in the *${t.program}* program. Could you share details, pricing & next batch availability?`,
+                  {
+                    source: "transformation_card",
+                    campaign: "hall_of_champions",
+                    program: t.program,
+                    member: t.name,
+                    extra: { tag: t.tag, age: String(t.age) },
+                  },
+                )}
+                target="_blank"
+                rel="noopener"
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
+                className="group/cta relative flex-1 flex items-center justify-center gap-2 py-3.5 bg-gradient-flame text-white font-bold uppercase tracking-[0.18em] text-[11px] hover:shadow-flame transition-all overflow-hidden"
+                data-cursor-label="WhatsApp"
+              >
+                <span aria-hidden className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="relative">
+                  <path d="M19.05 4.91A10 10 0 0 0 3.1 17.7L2 22l4.4-1.15a10 10 0 0 0 4.79 1.22A10 10 0 0 0 19.05 4.9zM12.2 20.3a8.31 8.31 0 0 1-4.24-1.16l-.3-.18-2.6.68.7-2.54-.2-.32a8.32 8.32 0 1 1 6.64 3.52z" />
+                </svg>
+                <span className="relative truncate">Inquire about {t.program}</span>
+              </a>
+              <ShareButton t={t} />
+            </div>
           </div>
         </div>
       </article>
@@ -284,3 +296,66 @@ function ImageOrPlaceholder({
     </div>
   );
 }
+
+function ShareButton({ t }: { t: Transformation }) {
+  const [busy, setBusy] = useState(false);
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (busy) return;
+    setBusy(true);
+    try {
+      const channel = await shareTransformation({
+        name: t.name,
+        caption: t.caption,
+        detail: t.detail,
+        program: t.program,
+        tag: t.tag,
+        initial: t.initial,
+        imageSrc: t.after ?? t.before,
+      });
+      if (channel === "native") toast.success("Shared!");
+      else if (channel === "clipboard")
+        toast.success("Link copied & share image downloaded", {
+          description: "Paste anywhere — image saved to your downloads.",
+        });
+      else if (channel === "download")
+        toast.success("Share image downloaded", {
+          description: "Attach it to your post.",
+        });
+      else toast.error("Couldn't share — try again");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleShare}
+      onMouseDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
+      disabled={busy}
+      aria-label={`Share ${t.name}'s transformation`}
+      title="Share this transformation"
+      className="relative px-4 bg-card hover:bg-accent hover:text-accent-foreground border-l border-border/60 transition-colors flex items-center justify-center disabled:opacity-60"
+      data-cursor-label="Share"
+    >
+      {busy ? (
+        <svg className="animate-spin" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.4">
+          <path d="M10 2a8 8 0 1 1-8 8" strokeLinecap="round" />
+        </svg>
+      ) : (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <circle cx="18" cy="5" r="3" />
+          <circle cx="6" cy="12" r="3" />
+          <circle cx="18" cy="19" r="3" />
+          <line x1="8.6" y1="13.5" x2="15.4" y2="17.5" />
+          <line x1="15.4" y1="6.5" x2="8.6" y2="10.5" />
+        </svg>
+      )}
+    </button>
+  );
+}
+
