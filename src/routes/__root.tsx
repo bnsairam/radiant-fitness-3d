@@ -3,6 +3,7 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 import appCss from "../styles.css?url";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { MagneticCursor } from "@/components/MagneticCursor";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -73,6 +74,7 @@ function RootComponent() {
       <ScrollProgress />
       <MagneticCursor />
       <Outlet />
+      <Toaster />
     </>
   );
 }
