@@ -35,10 +35,28 @@ export function TransformationGallery({ heading = true }: { heading?: boolean })
   const [mode, setMode] = useState<Mode>("grid");
   const [openItem, setOpenItem] = useState<Transformation | null>(null);
 
+  const counts = useMemo(() => {
+    const c: Record<string, number> = { All: TRANSFORMATIONS.length };
+    for (const tab of TABS) {
+      if (tab === "All") continue;
+      c[tab] = TRANSFORMATIONS.filter((t) => t.tag === tab).length;
+    }
+    return c;
+  }, []);
+
   const filtered =
     active === "All"
       ? TRANSFORMATIONS
       : TRANSFORMATIONS.filter((t) => t.tag === active);
+
+  // Deep-link: open lightbox when ?member=<slug> is in the URL
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const slug = new URLSearchParams(window.location.search).get("member");
+    if (!slug) return;
+    const match = TRANSFORMATIONS.find((t) => transformationSlug(t.name) === slug);
+    if (match) setOpenItem(match);
+  }, []);
 
   return (
     <section
@@ -73,15 +91,17 @@ export function TransformationGallery({ heading = true }: { heading?: boolean })
         )}
 
         {/* Controls row: tabs + view mode */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
-          <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div className="flex flex-wrap items-center gap-2">
             {TABS.map((tab) => {
               const isActive = active === tab;
+              const count = counts[tab];
               return (
                 <button
                   key={tab}
                   type="button"
                   onClick={() => setActive(tab)}
+                  aria-pressed={isActive}
                   className={`px-4 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold border transition-all ${
                     isActive
                       ? "bg-primary text-primary-foreground border-primary shadow-glow"
@@ -89,14 +109,31 @@ export function TransformationGallery({ heading = true }: { heading?: boolean })
                   }`}
                 >
                   {tab}
-                  <span className="ml-2 opacity-60">
-                    {tab === "All"
-                      ? TRANSFORMATIONS.length
-                      : TRANSFORMATIONS.filter((t) => t.tag === tab).length}
+                  <span
+                    className={`ml-2 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] tracking-normal ${
+                      isActive
+                        ? "bg-primary-foreground/20 text-primary-foreground"
+                        : "bg-background/60 text-muted-foreground"
+                    }`}
+                  >
+                    {count}
                   </span>
                 </button>
               );
             })}
+            {active !== "All" && (
+              <button
+                type="button"
+                onClick={() => setActive("All")}
+                className="ml-1 inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold border border-accent/50 text-accent bg-accent/5 hover:bg-accent hover:text-accent-foreground transition-all"
+                aria-label="Clear category filter"
+              >
+                <svg width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+                  <path d="M5 5L15 15M15 5L5 15" />
+                </svg>
+                Clear
+              </button>
+            )}
           </div>
 
           {/* View mode toggle */}
