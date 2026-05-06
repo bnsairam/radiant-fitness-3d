@@ -296,3 +296,66 @@ function ImageOrPlaceholder({
     </div>
   );
 }
+
+function ShareButton({ t }: { t: Transformation }) {
+  const [busy, setBusy] = useState(false);
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (busy) return;
+    setBusy(true);
+    try {
+      const channel = await shareTransformation({
+        name: t.name,
+        caption: t.caption,
+        detail: t.detail,
+        program: t.program,
+        tag: t.tag,
+        initial: t.initial,
+        imageSrc: t.after ?? t.before,
+      });
+      if (channel === "native") toast.success("Shared!");
+      else if (channel === "clipboard")
+        toast.success("Link copied & share image downloaded", {
+          description: "Paste anywhere — image saved to your downloads.",
+        });
+      else if (channel === "download")
+        toast.success("Share image downloaded", {
+          description: "Attach it to your post.",
+        });
+      else toast.error("Couldn't share — try again");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleShare}
+      onMouseDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
+      disabled={busy}
+      aria-label={`Share ${t.name}'s transformation`}
+      title="Share this transformation"
+      className="relative px-4 bg-card hover:bg-accent hover:text-accent-foreground border-l border-border/60 transition-colors flex items-center justify-center disabled:opacity-60"
+      data-cursor-label="Share"
+    >
+      {busy ? (
+        <svg className="animate-spin" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.4">
+          <path d="M10 2a8 8 0 1 1-8 8" strokeLinecap="round" />
+        </svg>
+      ) : (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <circle cx="18" cy="5" r="3" />
+          <circle cx="6" cy="12" r="3" />
+          <circle cx="18" cy="19" r="3" />
+          <line x1="8.6" y1="13.5" x2="15.4" y2="17.5" />
+          <line x1="15.4" y1="6.5" x2="8.6" y2="10.5" />
+        </svg>
+      )}
+    </button>
+  );
+}
+
