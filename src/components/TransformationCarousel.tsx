@@ -150,14 +150,14 @@ export function CarouselCarousel({
     if (!dragRef.current.active) return;
     const dx = e.clientX - dragRef.current.startX;
     if (Math.abs(dx) > 3) dragRef.current.moved = true;
-    angleRef.current = dragRef.current.startAngle + dx * 0.32;
+    angleRef.current = dragRef.current.startAngle + dx * 0.55;
     setAngle(angleRef.current);
 
     // Track velocity for inertia
     const now = performance.now();
     const dt = Math.max(1, now - lastMoveTime.current);
     const vx = e.clientX - lastMoveX.current;
-    velRef.current = (vx / dt) * 16 * 0.32; // deg per frame approx
+    velRef.current = (vx / dt) * 16 * 0.55; // deg per frame approx
     lastMoveTime.current = now;
     lastMoveX.current = e.clientX;
   };
