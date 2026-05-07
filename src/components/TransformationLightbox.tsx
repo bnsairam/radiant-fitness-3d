@@ -330,19 +330,52 @@ export function TransformationLightbox({
           </div>
 
           {/* Verified strip */}
-          <div className="mt-auto flex items-center justify-between pt-4 border-t border-border">
+          <div className="mt-auto flex items-center justify-between gap-3 pt-4 border-t border-border">
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-accent font-bold">
               <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M10 0L12.5 5.5L18 6L13.5 10L15 16L10 13L5 16L6.5 10L2 6L7.5 5.5z" />
               </svg>
               Verified Member
             </div>
-            <a
-              href="/contact"
-              className="px-4 py-2 rounded-full bg-gradient-electric text-foreground text-[10px] uppercase tracking-[0.3em] font-bold shadow-glow hover:scale-105 transition-transform"
-            >
-              Start Yours →
-            </a>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={async () => {
+                  const id = toast.loading("Generating share card…");
+                  const channel = await shareTransformation({
+                    name: t.name,
+                    caption: t.caption,
+                    detail: t.detail,
+                    program: t.program,
+                    tag: t.tag,
+                    initial: t.initial,
+                    imageSrc: t.after,
+                  });
+                  toast.dismiss(id);
+                  if (channel === "native") toast.success("Shared!");
+                  else if (channel === "clipboard") toast.success("Link copied · image downloaded");
+                  else if (channel === "download") toast.success("Share image downloaded");
+                  else toast.error("Couldn't share — try again");
+                }}
+                aria-label={`Share ${t.name}'s transformation`}
+                data-cursor-label="Share"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-card/80 hover:border-accent hover:text-accent text-[10px] uppercase tracking-[0.3em] font-bold transition-all"
+              >
+                <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="15" cy="4.5" r="2.2" />
+                  <circle cx="5" cy="10" r="2.2" />
+                  <circle cx="15" cy="15.5" r="2.2" />
+                  <path d="M7 9L13 5.5M7 11L13 14.5" />
+                </svg>
+                Share
+              </button>
+              <a
+                href="/contact"
+                className="px-4 py-2 rounded-full bg-gradient-electric text-foreground text-[10px] uppercase tracking-[0.3em] font-bold shadow-glow hover:scale-105 transition-transform"
+              >
+                Start Yours →
+              </a>
+            </div>
           </div>
         </div>
       </div>
