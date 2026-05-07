@@ -172,7 +172,7 @@ export function CarouselCarousel({
       snapTo(Math.round(angleRef.current / step) * step);
     }
     // Otherwise inertia loop handles snap
-    setTimeout(() => setPaused(false), 1500);
+    setTimeout(() => setPaused(false), 600);
   };
 
   // Wheel: horizontal scroll rotates
