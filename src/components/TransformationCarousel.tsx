@@ -73,9 +73,9 @@ export function CarouselCarousel({
     let target: number | null = null;
 
     const SNAP_TOLERANCE = 0.05;
-    const SPRING = 0.14;
-    const FRICTION = 0.94;
-    const AUTO_SPEED = -0.06; // gentle clockwise drift
+    const SPRING = 0.28;
+    const FRICTION = 0.9;
+    const AUTO_SPEED = -0.18; // brisker drift
 
     const tick = () => {
       // 1) Free inertia after release
