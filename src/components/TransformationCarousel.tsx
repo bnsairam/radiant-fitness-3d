@@ -73,9 +73,9 @@ export function CarouselCarousel({
     let target: number | null = null;
 
     const SNAP_TOLERANCE = 0.05;
-    const SPRING = 0.14;
-    const FRICTION = 0.94;
-    const AUTO_SPEED = -0.06; // gentle clockwise drift
+    const SPRING = 0.28;
+    const FRICTION = 0.9;
+    const AUTO_SPEED = -0.18; // brisker drift
 
     const tick = () => {
       // 1) Free inertia after release
@@ -150,14 +150,14 @@ export function CarouselCarousel({
     if (!dragRef.current.active) return;
     const dx = e.clientX - dragRef.current.startX;
     if (Math.abs(dx) > 3) dragRef.current.moved = true;
-    angleRef.current = dragRef.current.startAngle + dx * 0.32;
+    angleRef.current = dragRef.current.startAngle + dx * 0.55;
     setAngle(angleRef.current);
 
     // Track velocity for inertia
     const now = performance.now();
     const dt = Math.max(1, now - lastMoveTime.current);
     const vx = e.clientX - lastMoveX.current;
-    velRef.current = (vx / dt) * 16 * 0.32; // deg per frame approx
+    velRef.current = (vx / dt) * 16 * 0.55; // deg per frame approx
     lastMoveTime.current = now;
     lastMoveX.current = e.clientX;
   };
@@ -172,7 +172,7 @@ export function CarouselCarousel({
       snapTo(Math.round(angleRef.current / step) * step);
     }
     // Otherwise inertia loop handles snap
-    setTimeout(() => setPaused(false), 1500);
+    setTimeout(() => setPaused(false), 600);
   };
 
   // Wheel: horizontal scroll rotates
